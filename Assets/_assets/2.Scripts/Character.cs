@@ -3,7 +3,7 @@ using UnityEngine.Networking;
 using System.Collections;
 
 
-namespace PaintBall
+namespace TheWitnesses
 {
     public class Character : NetworkBehaviour
     {
@@ -12,7 +12,6 @@ namespace PaintBall
         public bool lockCursor;
         public float upDownRange = 60;
 
-        public GameObject bulletPrefab;
 
         private Camera _camera;
 
@@ -20,15 +19,12 @@ namespace PaintBall
         private CharacterController _character;
         private float rotUpDown = 0;
 
-        public const int maxHealth = 100;
 
-        [SyncVar]
-        public int health = maxHealth;
 
-        public override void OnStartLocalPlayer()
-        {
-            GetComponent<MeshRenderer>().material.color = Color.red;
-        }
+        //public override void OnStartLocalPlayer()
+        //{
+        //    GetComponent<MeshRenderer>().material.color = Color.red;
+        //}
 
 
         void Start()
@@ -81,53 +77,14 @@ namespace PaintBall
 
         }
 
-        [Command]
+        //[Command]
         void CmdFire()
         {
-            // This [Command] code is run on the server!
-
-            // create the bullet object locally
-            var bullet = (GameObject)Instantiate(
-                 bulletPrefab,
-                 transform.position + transform.forward,
-                 Quaternion.identity);
-
-            bullet.GetComponent<Rigidbody>().velocity = transform.forward * 20;
-
-            // spawn the bullet on the clients
-            NetworkServer.Spawn(bullet);
-
-            // when the bullet is destroyed on the server it will automaticaly be destroyed on clients
-            Destroy(bullet, 2.0f);
+            
         }
 
 
 
-        public void TakeDamage(int amount)
-        {
-            if (!isServer)
-                return;
-
-            health -= amount;
-            if (health <= 0)
-            {
-                health = maxHealth;
-
-                // called on the server, will be invoked on the clients
-                RpcRespawn();
-                Debug.Log("Dead!");
-            }
-        }
-
-        [ClientRpc]
-        void RpcRespawn()
-        {
-            if (isLocalPlayer)
-            {
-                // move back to zero location
-                transform.position = Vector3.zero;
-            }
-        }
 
         private void CursorLockUpdate()
         {
