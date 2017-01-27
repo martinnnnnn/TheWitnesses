@@ -189,6 +189,9 @@ MonoBehaviour:
   smooth: 0
   lockCursor: 0
   upDownRange: 60
+  layerMask:
+    serializedVersion: 2
+    m_Bits: 256
 --- !u!143 &143845146578611054
 CharacterController:
   m_ObjectHideFlags: 1

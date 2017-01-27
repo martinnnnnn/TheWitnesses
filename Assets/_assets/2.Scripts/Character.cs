@@ -19,6 +19,7 @@ namespace TheWitnesses
         private CharacterController _character;
         private float rotUpDown = 0;
 
+        public LayerMask layerMask;
 
 
         //public override void OnStartLocalPlayer()
@@ -72,18 +73,26 @@ namespace TheWitnesses
 
             if (Input.GetMouseButtonDown(0))
             {
-                CmdFire();
+                Fire();
             }
 
         }
 
         //[Command]
-        void CmdFire()
+        void Fire()
         {
-            
+            RaycastHit info;
+            Ray ray = _camera.ScreenPointToRay(new Vector2(Screen.width/2,Screen.height/2));
+            if (Physics.Raycast(ray, out info, 100, layerMask))
+            {
+                GridCoord coord = info.collider.GetComponent<GridCoord>();
+                if (coord)
+                {
+                    Debug.Log("coord:" + coord.GetPosition().x + "," + coord.GetPosition().y);
+                }
+            }
+
         }
-
-
 
 
         private void CursorLockUpdate()
