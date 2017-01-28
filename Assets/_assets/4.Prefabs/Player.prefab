@@ -40,6 +40,8 @@ GameObject:
   - component: {fileID: 114592290985130870}
   - component: {fileID: 114391512829584262}
   - component: {fileID: 114577105628826374}
+  - component: {fileID: 23410046291476326}
+  - component: {fileID: 33780547915769888}
   m_Layer: 0
   m_Name: Player
   m_TagString: Untagged
@@ -108,6 +110,44 @@ Camera:
   m_StereoConvergence: 10
   m_StereoSeparation: 0.022
   m_StereoMirrorMode: 0
+--- !u!23 &23410046291476326
+MeshRenderer:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1805711246835376}
+  m_Enabled: 1
+  m_CastShadows: 1
+  m_ReceiveShadows: 1
+  m_MotionVectors: 1
+  m_LightProbeUsage: 1
+  m_ReflectionProbeUsage: 1
+  m_Materials:
+  - {fileID: 2100000, guid: f88a17c0c7c267945af71f1a88826386, type: 2}
+  m_StaticBatchInfo:
+    firstSubMesh: 0
+    subMeshCount: 0
+  m_StaticBatchRoot: {fileID: 0}
+  m_ProbeAnchor: {fileID: 0}
+  m_LightProbeVolumeOverride: {fileID: 0}
+  m_ScaleInLightmap: 1
+  m_PreserveUVs: 0
+  m_IgnoreNormalsForChartDetection: 0
+  m_ImportantGI: 0
+  m_SelectedEditorRenderState: 3
+  m_MinimumChartSize: 4
+  m_AutoUVMaxDistance: 0.5
+  m_AutoUVMaxAngle: 89
+  m_LightmapParameters: {fileID: 0}
+  m_SortingLayerID: 0
+  m_SortingOrder: 0
+--- !u!33 &33780547915769888
+MeshFilter:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1805711246835376}
+  m_Mesh: {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
 --- !u!54 &54482262362414884
 Rigidbody:
   m_ObjectHideFlags: 1
@@ -189,7 +229,7 @@ MonoBehaviour:
   smooth: 0
   lockCursor: 0
   upDownRange: 60
-  Grid: {fileID: 114632127283152608, guid: 7515f5f623f88bc43bdecf79dd6338cc, type: 2}
+  Grid: {fileID: 0}
   layerMask:
     serializedVersion: 2
     m_Bits: 256

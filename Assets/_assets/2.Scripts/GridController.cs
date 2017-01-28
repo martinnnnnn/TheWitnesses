@@ -7,10 +7,9 @@ namespace TheWitnesses
 {
 
     
-    public class GridController : MonoBehaviour
+    public class GridController : NetworkBehaviour
     {
 
-        float CoordGap;
 
         public GridCoord[] _coordsArray;
         GridCoord[][] _coordsMatrix;
@@ -18,18 +17,27 @@ namespace TheWitnesses
 
         void Start()
         {
-            
-            InitGrid();
+            for (int i = 0; i < _coordsArray.Length; i++)
+            {
+                _coordsArray[i] = null;
+            }
 
+            GameObject[] objs = GameObject.FindGameObjectsWithTag("GridCoord");
+            for (int i = 0; i < objs.Length; i++)
+            {
+                _coordsArray[i] = objs[i].GetComponent<GridCoord>();
+                Debug.Log("i: " + i + "(" + _coordsArray[i].GetPosition().x + "," + _coordsArray[i].GetPosition().y + ")");
+            }
+
+            InitGrid();
+            
         }
 
 
         public void SetCoord(GridCoord coord)
         {
-            Debug.Log("setcoord");
             if (Good(coord))
             {
-                Debug.Log("good");
                 List<GridCoord> newline = CheckLines(coord);
                 ActivateCoord(coord,newline);
                 ActivateLine(coord, newline);
@@ -161,7 +169,6 @@ namespace TheWitnesses
 
         void InitGrid()
         {
-            Debug.Log("mescouillessurtonnez");
             _coordsMatrix = new GridCoord[4][];
             for (int i = 0; i < _coordsMatrix.Length; i++)
             {
@@ -178,6 +185,7 @@ namespace TheWitnesses
             {
                 for (int j = 0; j < _coordsMatrix[i].Length; j++)
                 {
+                    Debug.Log(i + "," + j);
                     Debug.Log(_coordsMatrix[i][j].GetPosition().x + "," + _coordsMatrix[i][j].GetPosition().y);
                 }
             }
