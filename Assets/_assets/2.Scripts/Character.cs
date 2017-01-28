@@ -14,7 +14,7 @@ namespace TheWitnesses
 
         public GridController Grid;
 
-        private Camera _camera;
+        private Transform _camera;
 
         private bool _unLockCursor;
         private CharacterController _character;
@@ -33,23 +33,26 @@ namespace TheWitnesses
         {
             if (!isLocalPlayer)
             {
-                GetComponentInChildren<Camera>().enabled = false;
+                Destroy(this);
                 return;
             }
 
             Grid = GameObject.Find("Grid").GetComponent<GridController>();
-            //Camera cam = GetComponentInChildren<Camera>();
-            _camera = GetComponentInChildren<Camera>();
-            //_camera = Camera.main;
-            //_camera.transform.position = cam.transform.position;
-            //cam.gameObject.SetActive(false);
-            //_camera.enabled = true;
 
+            _camera = Camera.main.transform;
+            SetCamera();
             _character = GetComponent<CharacterController>();
 
             _unLockCursor = true;
         }
 
+        void SetCamera()
+        {
+            Transform camStart = transform.Find("CameraStartingPosition").transform;
+            _camera.position = camStart.position;
+            _camera.rotation = camStart.rotation;
+            _camera.SetParent(transform);
+        }
 
 
         void Update()
@@ -88,7 +91,7 @@ namespace TheWitnesses
         void Fire()
         {
             RaycastHit info;
-            Ray ray = _camera.ScreenPointToRay(new Vector2(Screen.width/2,Screen.height/2));
+            Ray ray = Camera.main.ScreenPointToRay(new Vector2(Screen.width/2,Screen.height/2));
             if (Physics.Raycast(ray, out info, 100, layerMask))
             {
                 GridCoord coord = info.collider.GetComponent<GridCoord>();
