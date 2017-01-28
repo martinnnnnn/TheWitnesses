@@ -66,6 +66,11 @@ namespace TheWitnesses
             return _owned;
         }
 
+        public bool isActivated()
+        {
+            return _activated;
+        }
+
     }
 }
 
