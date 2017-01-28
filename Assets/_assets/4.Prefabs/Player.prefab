@@ -189,6 +189,7 @@ MonoBehaviour:
   smooth: 0
   lockCursor: 0
   upDownRange: 60
+  Grid: {fileID: 114632127283152608, guid: 7515f5f623f88bc43bdecf79dd6338cc, type: 2}
   layerMask:
     serializedVersion: 2
     m_Bits: 256

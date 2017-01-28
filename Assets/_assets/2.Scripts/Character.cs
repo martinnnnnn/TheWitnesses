@@ -12,6 +12,7 @@ namespace TheWitnesses
         public bool lockCursor;
         public float upDownRange = 60;
 
+        public GridController Grid;
 
         private Camera _camera;
 
@@ -30,6 +31,7 @@ namespace TheWitnesses
 
         void Start()
         {
+            Grid = GameObject.Find("Grid").GetComponent<GridController>();
             if (!isLocalPlayer)
             {
                 GetComponentInChildren<Camera>().enabled = false;
@@ -89,6 +91,7 @@ namespace TheWitnesses
                 if (coord)
                 {
                     Debug.Log("coord:" + coord.GetPosition().x + "," + coord.GetPosition().y);
+                    Grid.SetCoord(coord);
                 }
             }
 
