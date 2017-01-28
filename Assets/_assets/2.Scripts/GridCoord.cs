@@ -23,7 +23,7 @@ namespace TheWitnesses
         bool _activated = false;
         bool _owned = false;
         
-        void Start()
+        void Awake()
         {
             gridPosition.x = x;
             gridPosition.y = y;
@@ -44,7 +44,6 @@ namespace TheWitnesses
 
         public void SetActivated()
         {
-            Debug.Log("color");
             _activated = true;
             GetComponent<MeshRenderer>().material.color = Color.red;
         }

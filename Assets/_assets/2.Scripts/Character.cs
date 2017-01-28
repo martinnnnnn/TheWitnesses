@@ -23,23 +23,27 @@ namespace TheWitnesses
         public LayerMask layerMask;
 
 
-        //public override void OnStartLocalPlayer()
-        //{
-        //    GetComponent<MeshRenderer>().material.color = Color.red;
-        //}
+        public override void OnStartLocalPlayer()
+        {
+            GetComponent<MeshRenderer>().material.color = Color.red;
+        }
 
 
         void Start()
         {
-            Grid = GameObject.Find("Grid").GetComponent<GridController>();
             if (!isLocalPlayer)
             {
                 GetComponentInChildren<Camera>().enabled = false;
                 return;
             }
 
+            Grid = GameObject.Find("Grid").GetComponent<GridController>();
+            //Camera cam = GetComponentInChildren<Camera>();
             _camera = GetComponentInChildren<Camera>();
-            _camera.enabled = true;
+            //_camera = Camera.main;
+            //_camera.transform.position = cam.transform.position;
+            //cam.gameObject.SetActive(false);
+            //_camera.enabled = true;
 
             _character = GetComponent<CharacterController>();
 

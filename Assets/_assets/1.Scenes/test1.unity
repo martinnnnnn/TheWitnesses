@@ -153,6 +153,43 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 6
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &676583257 stripped
+GameObject:
+  m_PrefabParentObject: {fileID: 1044909038899994, guid: 7515f5f623f88bc43bdecf79dd6338cc,
+    type: 2}
+  m_PrefabInternal: {fileID: 1826115775}
+--- !u!114 &676583259
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 676583257}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 372142912, guid: dc443db3e92b4983b9738c1131f555cb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_SceneId:
+    m_Value: 0
+  m_AssetId:
+    i0: 117
+    i1: 21
+    i2: 245
+    i3: 246
+    i4: 35
+    i5: 248
+    i6: 139
+    i7: 196
+    i8: 59
+    i9: 222
+    i10: 207
+    i11: 121
+    i12: 221
+    i13: 99
+    i14: 56
+    i15: 204
+  m_ServerOnly: 0
+  m_LocalPlayerAuthority: 0
 --- !u!1 &785071242
 GameObject:
   m_ObjectHideFlags: 0
@@ -529,7 +566,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!81 &1527021493
 AudioListener:
   m_ObjectHideFlags: 0
@@ -760,6 +797,70 @@ Prefab:
     - target: {fileID: 1044909038899994, guid: 7515f5f623f88bc43bdecf79dd6338cc, type: 2}
       propertyPath: m_IsActive
       value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1570637627458230, guid: 7515f5f623f88bc43bdecf79dd6338cc, type: 2}
+      propertyPath: m_TagString
+      value: GridCoord
+      objectReference: {fileID: 0}
+    - target: {fileID: 1384513270564354, guid: 7515f5f623f88bc43bdecf79dd6338cc, type: 2}
+      propertyPath: m_TagString
+      value: GridCoord
+      objectReference: {fileID: 0}
+    - target: {fileID: 1722196142914378, guid: 7515f5f623f88bc43bdecf79dd6338cc, type: 2}
+      propertyPath: m_TagString
+      value: GridCoord
+      objectReference: {fileID: 0}
+    - target: {fileID: 1251069383575168, guid: 7515f5f623f88bc43bdecf79dd6338cc, type: 2}
+      propertyPath: m_TagString
+      value: GridCoord
+      objectReference: {fileID: 0}
+    - target: {fileID: 1615431022712022, guid: 7515f5f623f88bc43bdecf79dd6338cc, type: 2}
+      propertyPath: m_TagString
+      value: GridCoord
+      objectReference: {fileID: 0}
+    - target: {fileID: 1089001704710046, guid: 7515f5f623f88bc43bdecf79dd6338cc, type: 2}
+      propertyPath: m_TagString
+      value: GridCoord
+      objectReference: {fileID: 0}
+    - target: {fileID: 1014873185159996, guid: 7515f5f623f88bc43bdecf79dd6338cc, type: 2}
+      propertyPath: m_TagString
+      value: GridCoord
+      objectReference: {fileID: 0}
+    - target: {fileID: 1958519291800314, guid: 7515f5f623f88bc43bdecf79dd6338cc, type: 2}
+      propertyPath: m_TagString
+      value: GridCoord
+      objectReference: {fileID: 0}
+    - target: {fileID: 1561172598231950, guid: 7515f5f623f88bc43bdecf79dd6338cc, type: 2}
+      propertyPath: m_TagString
+      value: GridCoord
+      objectReference: {fileID: 0}
+    - target: {fileID: 1497823426902114, guid: 7515f5f623f88bc43bdecf79dd6338cc, type: 2}
+      propertyPath: m_TagString
+      value: GridCoord
+      objectReference: {fileID: 0}
+    - target: {fileID: 1724491054733238, guid: 7515f5f623f88bc43bdecf79dd6338cc, type: 2}
+      propertyPath: m_TagString
+      value: GridCoord
+      objectReference: {fileID: 0}
+    - target: {fileID: 1446811950167242, guid: 7515f5f623f88bc43bdecf79dd6338cc, type: 2}
+      propertyPath: m_TagString
+      value: GridCoord
+      objectReference: {fileID: 0}
+    - target: {fileID: 1250189358064020, guid: 7515f5f623f88bc43bdecf79dd6338cc, type: 2}
+      propertyPath: m_TagString
+      value: GridCoord
+      objectReference: {fileID: 0}
+    - target: {fileID: 1293635792483662, guid: 7515f5f623f88bc43bdecf79dd6338cc, type: 2}
+      propertyPath: m_TagString
+      value: GridCoord
+      objectReference: {fileID: 0}
+    - target: {fileID: 1257424052440498, guid: 7515f5f623f88bc43bdecf79dd6338cc, type: 2}
+      propertyPath: m_TagString
+      value: GridCoord
+      objectReference: {fileID: 0}
+    - target: {fileID: 1142667507656054, guid: 7515f5f623f88bc43bdecf79dd6338cc, type: 2}
+      propertyPath: m_TagString
+      value: GridCoord
       objectReference: {fileID: 0}
     m_RemovedComponents:
     - {fileID: 114578540832423724, guid: 7515f5f623f88bc43bdecf79dd6338cc, type: 2}
