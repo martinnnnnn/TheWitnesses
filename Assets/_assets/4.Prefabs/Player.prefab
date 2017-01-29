@@ -69,7 +69,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1805711246835376}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0.65, z: 0}
+  m_LocalPosition: {x: 0, y: 1.147, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 4692063620749290}
@@ -208,12 +208,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_TransformSyncMode: 3
   m_SendInterval: 0.033333335
-  m_SyncRotationAxis: 7
+  m_SyncRotationAxis: 2
   m_RotationSyncCompression: 0
   m_SyncSpin: 0
   m_MovementTheshold: 0.001
   m_SnapThreshold: 5
-  m_InterpolateRotation: 1
+  m_InterpolateRotation: 15
   m_InterpolateMovement: 1
 --- !u!114 &114592290985130870
 MonoBehaviour:
@@ -229,10 +229,10 @@ MonoBehaviour:
   smooth: 0
   lockCursor: 0
   upDownRange: 60
-  Grid: {fileID: 0}
   layerMask:
     serializedVersion: 2
     m_Bits: 256
+  LinePrefab: {fileID: 1484498878401118, guid: 28518eac6dc2a5c48987b599a4e2eaba, type: 2}
 --- !u!143 &143845146578611054
 CharacterController:
   m_ObjectHideFlags: 1

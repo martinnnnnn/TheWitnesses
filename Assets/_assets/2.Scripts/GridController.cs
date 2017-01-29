@@ -12,44 +12,138 @@ namespace TheWitnesses
 
 
         public GridCoord[] _coordsArray;
+
         GridCoord[][] _coordsMatrix;
 
+        public GameObject LinePrefab;
+        List<LineHandler> _lines;
 
         void Start()
         {
+            _lines = new List<LineHandler>();
+
             for (int i = 0; i < _coordsArray.Length; i++)
             {
                 _coordsArray[i] = null;
             }
 
             GameObject[] objs = GameObject.FindGameObjectsWithTag("GridCoord");
+            Debug.Log("size:" + objs.Length);
             for (int i = 0; i < objs.Length; i++)
             {
                 _coordsArray[i] = objs[i].GetComponent<GridCoord>();
-                Debug.Log("i: " + i + "(" + _coordsArray[i].GetPosition().x + "," + _coordsArray[i].GetPosition().y + ")");
+                //Debug.Log("i: " + i + "(" + _coordsArray[i].GetPosition().x + "," + _coordsArray[i].GetPosition().y + ")");
             }
 
             InitGrid();
             
         }
 
-
-        public void SetCoord(GridCoord coord)
+        GridCoord _newCoord;
+        void Update()
         {
+            //if (!isServer)
+            //    return;
+
+            //if (_newCoord != null)
+            //{
+            //    List<GridCoord> newline = CheckLines(_newCoord);
+            //    ActivateCoord(_newCoord, newline);
+            //    ActivateLine(_newCoord, newline);
+            //    _newCoord = null;
+            //}
+        }
+
+        Character localClient;
+
+        [ClientRpc]
+        public void RpcSetCoord(GameObject gridObj, GameObject currentClient)
+        {
+            localClient = currentClient.GetComponent<Character>();
+            GridCoord coord = gridObj.GetComponent<GridCoord>();
+            //GridCoord coord = _coordsMatrix[x][y];
             if (Good(coord))
             {
+                //_newCoord = coord;
+
                 List<GridCoord> newline = CheckLines(coord);
-                ActivateCoord(coord,newline);
-                ActivateLine(coord, newline);
+                ActivateCoord(coord, newline);
+                //ActivateLine(coord, newline);
             }
         }
+
+
+
+        //public void SetCoord(int x, int y)
+        //{
+        //    GridCoord coord = _coordsMatrix[x][y];
+        //    if (Good(coord))
+        //    {
+        //        //_newCoord = coord;
+
+        //        List<GridCoord> newline = CheckLines(coord);
+        //        ActivateCoord(coord, newline);
+        //        ActivateLine(coord, newline);
+        //    }
+        //}
+
+
+        //[Command]
+        //public void Cmd_SetCoord(GridCoord coord)
+        //{
+        //    if (Good(coord))
+        //    {
+        //        _newCoord = coord;
+
+        //        List<GridCoord> newline = CheckLines(coord);
+        //        ActivateCoord(coord, newline);
+        //        ActivateLine(coord, newline);
+        //    }
+        //}
+
+        
+
+
+
+        //[Command]
+        //public void CmdCreateNewLine(GameObject firstCoord, GameObject sndCoord)
+        //{
+        //    if (firstCoord != sndCoord)
+        //    {
+        //        GameObject newLine = Instantiate(LinePrefab, transform);
+        //        LineHandler newLineHandler = newLine.GetComponent<LineHandler>();
+        //        newLineHandler.SetPositions(firstCoord.GetComponent<GridCoord>(), sndCoord.GetComponent<GridCoord>());
+        //        _lines.Add(newLineHandler);
+
+        //        NetworkServer.Spawn(newLine);   
+        //    }
+        //}
+
+        public void AddLine(LineHandler handler)
+        {
+            _lines.Add(handler);
+        }
+
 
         // active les nouvelles lignes
         void ActivateCoord(GridCoord firstCoord, List<GridCoord> line)
         {
+            firstCoord.SetOwned();
             foreach (GridCoord sndCoord in line)
             {
+                
                 sndCoord.SetOwned();
+
+                if (sndCoord!= firstCoord)
+                {
+                    if (localClient)
+                    {
+                        localClient.CmdCreateNewLine(firstCoord.gameObject, sndCoord.gameObject);
+                    }
+                    //CmdCreateNewLine(firstCoord.gameObject,sndCoord.gameObject);
+                }
+
+
                 if (firstCoord.GetPosition().x == sndCoord.GetPosition().x)
                 {
                     int x = firstCoord.GetPosition().x;
@@ -72,6 +166,7 @@ namespace TheWitnesses
                         _coordsMatrix[i][y].SetActivated();
                     }
                 }
+                
             }
         }
 
@@ -185,8 +280,8 @@ namespace TheWitnesses
             {
                 for (int j = 0; j < _coordsMatrix[i].Length; j++)
                 {
-                    Debug.Log(i + "," + j);
-                    Debug.Log(_coordsMatrix[i][j].GetPosition().x + "," + _coordsMatrix[i][j].GetPosition().y);
+                    //Debug.Log(i + "," + j);
+                    //Debug.Log(_coordsMatrix[i][j].GetPosition().x + "," + _coordsMatrix[i][j].GetPosition().y);
                 }
             }
         }

@@ -12,7 +12,7 @@ namespace TheWitnesses
         public bool lockCursor;
         public float upDownRange = 60;
 
-        public GridController Grid;
+        GridController Grid;
 
         private Transform _camera;
 
@@ -33,11 +33,12 @@ namespace TheWitnesses
         {
             if (!isLocalPlayer)
             {
-                Destroy(this);
+                //Destroy(this);
                 return;
             }
 
-            Grid = GameObject.Find("Grid").GetComponent<GridController>();
+            Grid = GameObject.FindGameObjectWithTag("Grid").GetComponent<GridController>();
+            //Grid = GameObject.Find("Grid(Clone)").GetComponent<GridController>();
 
             _camera = Camera.main.transform;
             SetCamera();
@@ -97,12 +98,35 @@ namespace TheWitnesses
                 GridCoord coord = info.collider.GetComponent<GridCoord>();
                 if (coord)
                 {
-                    Debug.Log("coord:" + coord.GetPosition().x + "," + coord.GetPosition().y);
-                    Grid.SetCoord(coord);
+                    //Debug.Log("coord:" + coord.GetPosition().x + "," + coord.GetPosition().y);
+                    //Grid.Cmd_SetCoord(coord);
+  
+                    CmdSetCoord(coord.gameObject);
+                    //Grid.SetCoord(coord.GetPosition().x,coord.GetPosition().y);
                 }
             }
 
         }
+
+        [SyncVar]
+        private GameObject objectID;
+        private NetworkIdentity objNetId;
+
+        [Command]
+        void CmdSetCoord(GameObject coord)
+        {
+            if (!Grid)
+            {
+                Grid = GameObject.FindGameObjectWithTag("Grid").GetComponent<GridController>();
+            }
+
+            objNetId = Grid.GetComponent<NetworkIdentity>();
+            objNetId.AssignClientAuthority(connectionToClient);
+            Grid.RpcSetCoord(coord,gameObject);
+            objNetId.RemoveClientAuthority(connectionToClient);
+
+        }
+
 
 
         private void CursorLockUpdate()
@@ -128,7 +152,30 @@ namespace TheWitnesses
             }
         }
 
+        public GameObject LinePrefab;
 
+        [Command]
+        public void CmdCreateNewLine(GameObject firstCoord, GameObject sndCoord)
+        {
+
+
+            if (firstCoord != sndCoord)
+            {
+                GameObject newLine = Instantiate(LinePrefab, Grid.transform);
+                LineHandler newLineHandler = newLine.GetComponent<LineHandler>();
+                Grid.AddLine(newLineHandler);
+                NetworkServer.Spawn(newLine);
+
+                objNetId = newLine.GetComponent<NetworkIdentity>();
+                objNetId.AssignClientAuthority(connectionToClient);
+                newLineHandler.RpcSetPositions(firstCoord, sndCoord);
+                //newLineHandler.SetPositions(firstCoord.GetComponent<GridCoord>(), sndCoord.GetComponent<GridCoord>());
+                objNetId.RemoveClientAuthority(connectionToClient);
+
+
+
+            }
+        }
     }
 }
 
