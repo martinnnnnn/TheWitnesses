@@ -22,6 +22,8 @@ namespace TheWitnesses
 
         bool _activated = false;
         bool _owned = false;
+
+        bool _endOfLine = false;
         
         void Awake()
         {
@@ -38,8 +40,19 @@ namespace TheWitnesses
         public void SetOwned()
         {
             _owned = true;
+            _endOfLine = !_endOfLine;
+            Debug.Log("end:" + _endOfLine);
             SetActivated();
             GetComponent<MeshRenderer>().material.color = Color.blue;
+            SetEndOfLine();
+        }
+
+        void SetEndOfLine()
+        {
+            if (_endOfLine)
+            {
+                GetComponent<MeshRenderer>().material.color = Color.yellow;
+            }
         }
 
         public void SetActivated()
@@ -52,7 +65,8 @@ namespace TheWitnesses
         {
             _owned = false;
             _activated = false;
-
+            _endOfLine = false;
+            GetComponent<MeshRenderer>().material.color = Color.white;
         }
 
         public bool IsAvailable()
@@ -68,6 +82,11 @@ namespace TheWitnesses
         public bool isActivated()
         {
             return _activated;
+        }
+
+        public bool isEndOfLine()
+        {
+            return _endOfLine;
         }
 
     }
