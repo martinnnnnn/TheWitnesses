@@ -127,7 +127,7 @@ LineRenderer:
   m_LightProbeUsage: 0
   m_ReflectionProbeUsage: 0
   m_Materials:
-  - {fileID: 2100000, guid: 76bb139552d5bc94e85d7d16b8d83df4, type: 2}
+  - {fileID: 2100000, guid: 0f078adfbd110a7011005aba44295342, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -175,7 +175,7 @@ LineRenderer:
         rgba: 4278190080
       key3:
         serializedVersion: 2
-        rgba: 0
+        rgba: 4278190080
       key4:
         serializedVersion: 2
         rgba: 0
@@ -197,16 +197,16 @@ LineRenderer:
       ctime6: 0
       ctime7: 0
       atime0: 0
-      atime1: 20046
+      atime1: 65535
       atime2: 65535
-      atime3: 0
+      atime3: 65535
       atime4: 0
       atime5: 0
       atime6: 0
       atime7: 0
-      m_Mode: 0
+      m_Mode: 1
       m_NumColorKeys: 2
-      m_NumAlphaKeys: 3
+      m_NumAlphaKeys: 2
     numCornerVertices: 0
     numCapVertices: 0
     alignment: 0

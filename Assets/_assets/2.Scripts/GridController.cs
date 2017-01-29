@@ -73,71 +73,48 @@ namespace TheWitnesses
         }
 
 
+        [ClientRpc]
+        public void RpcReset()
+        {
+            for(int i = 0; i < _coordsMatrix.Length; i++)
+            {
+                for (int j = 0; j < _coordsMatrix[i].Length; j++)
+                {
+                    _coordsMatrix[i][j].Reset();
+                }
+            }
+            
+        }
 
-        //public void SetCoord(int x, int y)
-        //{
-        //    GridCoord coord = _coordsMatrix[x][y];
-        //    if (Good(coord))
-        //    {
-        //        //_newCoord = coord;
-
-        //        List<GridCoord> newline = CheckLines(coord);
-        //        ActivateCoord(coord, newline);
-        //        ActivateLine(coord, newline);
-        //    }
-        //}
-
-
-        //[Command]
-        //public void Cmd_SetCoord(GridCoord coord)
-        //{
-        //    if (Good(coord))
-        //    {
-        //        _newCoord = coord;
-
-        //        List<GridCoord> newline = CheckLines(coord);
-        //        ActivateCoord(coord, newline);
-        //        ActivateLine(coord, newline);
-        //    }
-        //}
-
-        
-
-
-
-        //[Command]
-        //public void CmdCreateNewLine(GameObject firstCoord, GameObject sndCoord)
-        //{
-        //    if (firstCoord != sndCoord)
-        //    {
-        //        GameObject newLine = Instantiate(LinePrefab, transform);
-        //        LineHandler newLineHandler = newLine.GetComponent<LineHandler>();
-        //        newLineHandler.SetPositions(firstCoord.GetComponent<GridCoord>(), sndCoord.GetComponent<GridCoord>());
-        //        _lines.Add(newLineHandler);
-
-        //        NetworkServer.Spawn(newLine);   
-        //    }
-        //}
 
         public void AddLine(LineHandler handler)
         {
             _lines.Add(handler);
         }
 
+        public List<LineHandler> GetLines()
+        {
+            return _lines;
+        }
 
         // active les nouvelles lignes
         void ActivateCoord(GridCoord firstCoord, List<GridCoord> line)
         {
             firstCoord.SetOwned();
+            if (localClient)
+            {
+                localClient.CmdSpawnNewPointFX(firstCoord.gameObject);
+            }
+
             foreach (GridCoord sndCoord in line)
             {
                 
-                sndCoord.SetOwned();
 
                 if (sndCoord!= firstCoord)
                 {
                     if (localClient)
                     {
+                        sndCoord.SetOwned();
                         localClient.CmdCreateNewLine(firstCoord.gameObject, sndCoord.gameObject);
                     }
                     //CmdCreateNewLine(firstCoord.gameObject,sndCoord.gameObject);

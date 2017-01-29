@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 using UnityEngine.Networking;
-using System.Collections;
+using System.Collections.Generic;
 
 
 namespace TheWitnesses
@@ -86,6 +86,59 @@ namespace TheWitnesses
                 Fire();
             }
 
+            if (Input.GetMouseButtonDown(1))
+            {
+                Ping(true);
+            }
+            if (Input.GetMouseButtonUp(1))
+            {
+                Ping(false);
+            }
+
+            if (Input.GetButton("Fire1"))
+            {
+                CmdResetGrid();
+            }
+
+        }
+
+        void Ping(bool isPinging)
+        {
+            if (isPinging)
+            {
+                RaycastHit info;
+                Ray ray = Camera.main.ScreenPointToRay(new Vector2(Screen.width / 2, Screen.height / 2));
+                if (Physics.Raycast(ray, out info, 100, layerMask))
+                {
+                    GridCoord coord = info.collider.GetComponent<GridCoord>();
+                    if (coord)
+                    {
+                        CmdPing(coord.gameObject);
+                    }
+                }
+            }
+            else
+            {
+                CmdDestroyFXPing();
+            }
+        }
+
+        [Command]
+        void CmdDestroyFXPing()
+        {
+
+            Destroy(FXPing);
+            FXPing = null;
+        }
+
+        public GameObject FXPingPrefab;
+        GameObject FXPing;
+
+        [Command]
+        void CmdPing(GameObject obj)
+        {
+            FXPing = Instantiate(FXPingPrefab, obj.transform.position, obj.transform.rotation);
+            NetworkServer.Spawn(FXPing);
         }
 
         //[Command]
@@ -124,6 +177,31 @@ namespace TheWitnesses
             objNetId.AssignClientAuthority(connectionToClient);
             Grid.RpcSetCoord(coord,gameObject);
             objNetId.RemoveClientAuthority(connectionToClient);
+
+        }
+
+        [Command]
+        void CmdResetGrid()
+        {
+            if (!Grid)
+            {
+                Grid = GameObject.FindGameObjectWithTag("Grid").GetComponent<GridController>();
+            }
+
+            objNetId = Grid.GetComponent<NetworkIdentity>();
+            objNetId.AssignClientAuthority(connectionToClient);
+            Grid.RpcReset();
+            objNetId.RemoveClientAuthority(connectionToClient);
+
+            List<LineHandler> lines = Grid.GetLines();
+            for (int i = 0; i < lines.Count; i++)
+            {
+                if (lines[i])
+                {
+                    Destroy(lines[i].gameObject);
+                }
+            }
+            lines.Clear();
 
         }
 
@@ -175,6 +253,16 @@ namespace TheWitnesses
 
 
             }
+        }
+
+
+        public GameObject FXSpawnNewPoint;
+        [Command]
+        public void CmdSpawnNewPointFX(GameObject obj)
+        {
+            GameObject newFX = Instantiate(FXSpawnNewPoint, obj.transform.position,obj.transform.rotation);
+            NetworkServer.Spawn(newFX);
+            Destroy(newFX, 0.50f);
         }
     }
 }
