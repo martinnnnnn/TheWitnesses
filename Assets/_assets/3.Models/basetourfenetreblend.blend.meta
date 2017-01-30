@@ -1,6 +1,6 @@
 fileFormatVersion: 2
-guid: 249d7d8f92994ee4ca69ea90c1115dbb
-timeCreated: 1485605123
+guid: da8c2daa78404454dba275bcfe142afa
+timeCreated: 1485700392
 licenseType: Free
 ModelImporter:
   serializedVersion: 19
@@ -9,7 +9,7 @@ ModelImporter:
     400000: //RootNode
     2300000: //RootNode
     3300000: //RootNode
-    4300000: Cylinder
+    4300000: tourmurfenetre
     7400000: Default Take
     9500000: //RootNode
   materials:
