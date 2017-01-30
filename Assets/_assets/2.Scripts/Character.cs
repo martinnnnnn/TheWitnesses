@@ -25,7 +25,7 @@ namespace TheWitnesses
 
         public override void OnStartLocalPlayer()
         {
-            GetComponent<MeshRenderer>().material.color = Color.red;
+            //GetComponent<MeshRenderer>().material.color = Color.red;
         }
 
 
