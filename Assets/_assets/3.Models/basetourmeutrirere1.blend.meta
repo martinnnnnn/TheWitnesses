@@ -1,24 +1,15 @@
 fileFormatVersion: 2
-guid: 83221b811f9b9a54c8db03f64e1eeadc
-timeCreated: 1485700387
+guid: f87973b1f752fc046bf5cd64d70230cd
+timeCreated: 1486296544
 licenseType: Free
 ModelImporter:
   serializedVersion: 19
   fileIDToRecycleName:
     100000: //RootNode
-    100002: Cube
-    100004: tourporte
     400000: //RootNode
-    400002: Cube
-    400004: tourporte
     2300000: //RootNode
-    2300002: Cube
-    2300004: tourporte
     3300000: //RootNode
-    3300002: Cube
-    3300004: tourporte
-    4300000: tourporte
-    4300002: Cube
+    4300000: tourmurmeutriere_001
     7400000: Default Take
     9500000: //RootNode
   materials:
