@@ -1,6 +1,6 @@
 fileFormatVersion: 2
-guid: 035a2911c3ec0e64e830ab24db27fdec
-timeCreated: 1485700397
+guid: ebb8d84d12c3cff459328383b6201d44
+timeCreated: 1486296543
 licenseType: Free
 ModelImporter:
   serializedVersion: 19
@@ -9,7 +9,7 @@ ModelImporter:
     400000: //RootNode
     2300000: //RootNode
     3300000: //RootNode
-    4300000: tourmurmeutriere
+    4300000: tourporte
     7400000: Default Take
     9500000: //RootNode
   materials:
