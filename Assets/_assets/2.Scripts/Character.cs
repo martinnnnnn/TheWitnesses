@@ -22,11 +22,12 @@ namespace TheWitnesses
         private float rotUpDown = 0;
 
         public LayerMask layerMask;
-
+        public GameObject myBody;
         //public GridCoord currentPoint;
 
         public override void OnStartLocalPlayer()
         {
+            myBody.SetActive(false);
             //GetComponent<MeshRenderer>().material.color = Color.red;
             gridManager = GameObject.Find("GridManager").GetComponent<GridManager>();
         }
@@ -79,10 +80,10 @@ namespace TheWitnesses
             // Movement
             float movSide = Input.GetAxis("Horizontal") * 5f;
             float movForward = Input.GetAxis("Vertical") * 5f;
+
             Vector3 movement = new Vector3(movSide, 0, movForward);
             movement = transform.rotation * movement;
             _character.SimpleMove(movement);
-
 
             CursorLockUpdate();
 
