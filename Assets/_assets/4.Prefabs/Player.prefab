@@ -231,8 +231,9 @@ MonoBehaviour:
   upDownRange: 60
   layerMask:
     serializedVersion: 2
-    m_Bits: 256
+    m_Bits: 1280
   FXPingPrefab: {fileID: 100002, guid: ad31b90ebe2fbe5498dfca3f5488be96, type: 2}
+  endGridMaterial: {fileID: 2100000, guid: 34733d920e25ff842b516b18afaa2e51, type: 2}
   LinePrefab: {fileID: 1484498878401118, guid: 28518eac6dc2a5c48987b599a4e2eaba, type: 2}
   FXSpawnNewPoint: {fileID: 100000, guid: ce1ff70c5617461438d01b06b76ae60a, type: 2}
 --- !u!143 &143845146578611054

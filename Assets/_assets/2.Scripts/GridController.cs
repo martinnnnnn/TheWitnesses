@@ -10,7 +10,6 @@ namespace TheWitnesses
     public class GridController : NetworkBehaviour
     {
 
-
         public GridCoord[] _coordsArray;
 
         GridCoord[][] _coordsMatrix;
@@ -18,8 +17,16 @@ namespace TheWitnesses
         public GameObject LinePrefab;
         List<LineHandler> _lines;
 
+        public GridCoord startPoint;
+        public GridCoord endPoint;
+
+        public GridCoord currentPoint;
+
+        public GameObject cable;
+
         void Start()
         {
+            currentPoint = startPoint;
             _lines = new List<LineHandler>();
 
             for (int i = 0; i < _coordsArray.Length; i++)
@@ -27,13 +34,23 @@ namespace TheWitnesses
                 _coordsArray[i] = null;
             }
 
-            GameObject[] objs = GameObject.FindGameObjectsWithTag("GridCoord");
-            Debug.Log("size:" + objs.Length);
-            for (int i = 0; i < objs.Length; i++)
+            int j = 0;
+            foreach (Transform child in transform)
             {
-                _coordsArray[i] = objs[i].GetComponent<GridCoord>();
-                //Debug.Log("i: " + i + "(" + _coordsArray[i].GetPosition().x + "," + _coordsArray[i].GetPosition().y + ")");
+                if (child.tag == ("GridCoord"))
+                {
+                    Debug.Log("j:" + j);
+                    _coordsArray[j] = child.GetComponent<GridCoord>();
+                    j++;
+                }
             }
+            //GameObject[] objs = GameObject.FindGameObjectsWithTag("GridCoord");
+            //Debug.Log("size:" + objs.Length);
+            //for (int i = 0; i < objs.Length; i++)
+            //{
+            //    _coordsArray[i] = objs[i].GetComponent<GridCoord>();
+            //    //Debug.Log("i: " + i + "(" + _coordsArray[i].GetPosition().x + "," + _coordsArray[i].GetPosition().y + ")");
+            //}
 
             InitGrid();
             
@@ -59,16 +76,23 @@ namespace TheWitnesses
         [ClientRpc]
         public void RpcSetCoord(GameObject gridObj, GameObject currentClient)
         {
+            Debug.Log("rpcSetCoord");
             localClient = currentClient.GetComponent<Character>();
             GridCoord coord = gridObj.GetComponent<GridCoord>();
-            //GridCoord coord = _coordsMatrix[x][y];
+            for (int i = 0; i < _coordsMatrix.Length; i++)
+            {
+                for (int j = 0; j < _coordsMatrix[i].Length; j++)
+                {
+                    //Debug.Log(i + "," + j);
+                    Debug.Log("rpc: (" + _coordsMatrix[i][j].GetPosition().x + "," + _coordsMatrix[i][j].GetPosition().y + ")");
+                }
+            }
+
             if (Good(coord))
             {
-                //_newCoord = coord;
-
+                //localClient.CmdCallCheckLines(coord.gameObject);
                 List<GridCoord> newline = CheckLines(coord);
                 ActivateCoord(coord, newline);
-                //ActivateLine(coord, newline);
             }
         }
 
@@ -83,7 +107,10 @@ namespace TheWitnesses
                     _coordsMatrix[i][j].Reset();
                 }
             }
-            
+            currentPoint = startPoint;
+            startPointDone = false;
+
+
         }
 
 
@@ -100,6 +127,11 @@ namespace TheWitnesses
         // active les nouvelles lignes
         void ActivateCoord(GridCoord firstCoord, List<GridCoord> line)
         {
+            Debug.Log("size:" + line.Count);
+            if (line.Count == 0)
+            {
+                return;
+            }
             firstCoord.SetOwned();
             if (localClient)
             {
@@ -115,12 +147,18 @@ namespace TheWitnesses
                     if (localClient)
                     {
                         sndCoord.SetOwned();
+                        Debug.Log("line drawn");
                         localClient.CmdCreateNewLine(firstCoord.gameObject, sndCoord.gameObject);
+                        if (sndCoord == endPoint || firstCoord == endPoint)
+                        {
+                            
+                            Debug.Log("hello maggle");
+                            localClient.CmdEndGrid(endPoint.gameObject,cable);
+                        }
                     }
-                    //CmdCreateNewLine(firstCoord.gameObject,sndCoord.gameObject);
                 }
 
-
+                // activation des points entre les 2 points principaux
                 if (firstCoord.GetPosition().x == sndCoord.GetPosition().x)
                 {
                     int x = firstCoord.GetPosition().x;
@@ -163,35 +201,51 @@ namespace TheWitnesses
         {
             if (coord)
             {
+                Debug.Log("coord");
                 if (coord == _coordsMatrix[coord.GetPosition().x][coord.GetPosition().y])
                 {
+                    Debug.Log("good position");
+
                     if (coord.IsAvailable())
                     {
+                        Debug.Log("av");
+
                         return true;
                     }
                 }
             }
             return false;
         }
-        
+
+
+        bool startPointDone = false;
         // renvoie la liste de points avec lesquels le point coord va former des nouvelles lignes
         List<GridCoord> CheckLines(GridCoord firstCoord)
         {
             List<GridCoord> newPoints = new List<GridCoord>();
-            newPoints.Add(firstCoord);
 
-            int x = firstCoord.GetPosition().x;
-            for (int j = 0; j < _coordsMatrix[x].Length; j++)
+            if (!startPointDone)
             {
-                GridCoord sndCoord = _coordsMatrix[x][j];
-                if (sndCoord.isOwned())
+                Debug.Log("start");
+                if (firstCoord == startPoint)
                 {
+                    newPoints.Add(firstCoord);
+                    newPoints.Add(startPoint);
+                    startPointDone = true;
+                    currentPoint = firstCoord;
+                }
+                return newPoints;
+            }
+            else
+            {
 
-                    // trouver les points entre first et second
-                    // si un est available -> nop
+                if (currentPoint.GetPosition().x == firstCoord.GetPosition().x)
+                {
+                    
 
-                    int lowY = (firstCoord.GetPosition().y < sndCoord.GetPosition().y) ? firstCoord.GetPosition().y : sndCoord.GetPosition().y;
-                    int highY = (firstCoord.GetPosition().y < sndCoord.GetPosition().y) ? sndCoord.GetPosition().y : firstCoord.GetPosition().y;
+                    int x = currentPoint.GetPosition().x;
+                    int lowY = (firstCoord.GetPosition().y < currentPoint.GetPosition().y) ? firstCoord.GetPosition().y : currentPoint.GetPosition().y;
+                    int highY = (firstCoord.GetPosition().y < currentPoint.GetPosition().y) ? currentPoint.GetPosition().y : firstCoord.GetPosition().y;
 
                     bool canAdd = true;
                     for (int i = lowY + 1; i < highY; i++)
@@ -203,19 +257,16 @@ namespace TheWitnesses
                     }
                     if (canAdd)
                     {
-                        newPoints.Add(sndCoord);
+                        newPoints.Add(firstCoord);
+                        newPoints.Add(currentPoint);
+                        currentPoint = firstCoord;
                     }
                 }
-            }
-
-            int y = firstCoord.GetPosition().y;
-            for (int i = 0; i < _coordsMatrix.Length; i++)
-            {
-                GridCoord sndCoord = _coordsMatrix[i][y];
-                if (sndCoord.isOwned())
+                else if (currentPoint.GetPosition().y == firstCoord.GetPosition().y)
                 {
-                    int lowX = (firstCoord.GetPosition().x < sndCoord.GetPosition().x) ? firstCoord.GetPosition().x : sndCoord.GetPosition().x;
-                    int highX = (firstCoord.GetPosition().x < sndCoord.GetPosition().x) ? sndCoord.GetPosition().x : firstCoord.GetPosition().x;
+                    int y = currentPoint.GetPosition().y;
+                    int lowX = (firstCoord.GetPosition().x < currentPoint.GetPosition().x) ? firstCoord.GetPosition().x : currentPoint.GetPosition().x;
+                    int highX = (firstCoord.GetPosition().x < currentPoint.GetPosition().x) ? currentPoint.GetPosition().x : firstCoord.GetPosition().x;
 
                     bool canAdd = true;
                     for (int j = lowX + 1; j < highX; j++)
@@ -227,16 +278,83 @@ namespace TheWitnesses
                     }
                     if (canAdd)
                     {
-                        newPoints.Add(sndCoord);
+                        newPoints.Add(firstCoord);
+                        newPoints.Add(currentPoint);
+                        currentPoint = firstCoord;
                     }
-
-
-
-                    //newPoints.Add(_coordsMatrix[i][y]);
                 }
-            }
 
+            }
+            Debug.Log("first : (" + firstCoord.GetPosition().x + "," + firstCoord.GetPosition().y + ")");
+            Debug.Log("current : (" + currentPoint.GetPosition().x + "," + currentPoint.GetPosition().y + ")");
+
+            foreach (GridCoord coord in newPoints)
+            {
+                Debug.Log("(" + coord.GetPosition().x + "," + coord.GetPosition().y + ")");
+            }
             return newPoints;
+
+
+            //List<GridCoord> newPoints = new List<GridCoord>();
+            //newPoints.Add(firstCoord);
+
+            //int x = firstCoord.GetPosition().x;
+            //for (int j = 0; j < _coordsMatrix[x].Length; j++)
+            //{
+            //    GridCoord sndCoord = _coordsMatrix[x][j];
+            //    if (sndCoord.isOwned())
+            //    {
+
+            //        // trouver les points entre first et second
+            //        // si un est available -> nop
+
+            //        int lowY = (firstCoord.GetPosition().y < sndCoord.GetPosition().y) ? firstCoord.GetPosition().y : sndCoord.GetPosition().y;
+            //        int highY = (firstCoord.GetPosition().y < sndCoord.GetPosition().y) ? sndCoord.GetPosition().y : firstCoord.GetPosition().y;
+
+            //        bool canAdd = true;
+            //        for (int i = lowY + 1; i < highY; i++)
+            //        {
+            //            if (_coordsMatrix[x][i].isActivated())
+            //            {
+            //                canAdd = false;
+            //            }
+            //        }
+            //        if (canAdd)
+            //        {
+            //            newPoints.Add(sndCoord);
+            //        }
+            //    }
+            //}
+
+            //int y = firstCoord.GetPosition().y;
+            //for (int i = 0; i < _coordsMatrix.Length; i++)
+            //{
+            //    GridCoord sndCoord = _coordsMatrix[i][y];
+            //    if (sndCoord.isOwned())
+            //    {
+            //        int lowX = (firstCoord.GetPosition().x < sndCoord.GetPosition().x) ? firstCoord.GetPosition().x : sndCoord.GetPosition().x;
+            //        int highX = (firstCoord.GetPosition().x < sndCoord.GetPosition().x) ? sndCoord.GetPosition().x : firstCoord.GetPosition().x;
+
+            //        bool canAdd = true;
+            //        for (int j = lowX + 1; j < highX; j++)
+            //        {
+            //            if (_coordsMatrix[j][y].isActivated())
+            //            {
+            //                canAdd = false;
+            //            }
+            //        }
+            //        if (canAdd)
+            //        {
+            //            newPoints.Add(sndCoord);
+            //        }
+
+
+
+            //        //newPoints.Add(_coordsMatrix[i][y]);
+            //    }
+            //}
+
+            //return newPoints;
         }
 
         void InitGrid()
@@ -258,11 +376,84 @@ namespace TheWitnesses
                 for (int j = 0; j < _coordsMatrix[i].Length; j++)
                 {
                     //Debug.Log(i + "," + j);
-                    //Debug.Log(_coordsMatrix[i][j].GetPosition().x + "," + _coordsMatrix[i][j].GetPosition().y);
+                    Debug.Log("init: (" + _coordsMatrix[i][j].GetPosition().x + "," + _coordsMatrix[i][j].GetPosition().y + ")");
                 }
             }
         }
+
+        [ClientRpc]
+        public void RpcCheckLines(GameObject coord)
+        {
+            GridCoord firstCoord = coord.GetComponent<GridCoord>();
+            List<GridCoord> newPoints = new List<GridCoord>();
+
+            if (!startPointDone)
+            {
+                if (firstCoord == startPoint)
+                {
+                    newPoints.Add(firstCoord);
+                    newPoints.Add(startPoint);
+                    startPointDone = true;
+                    currentPoint = firstCoord;
+                }
+            }
+            else
+            {
+                if (currentPoint.GetPosition().x == firstCoord.GetPosition().x)
+                {
+                    int x = currentPoint.GetPosition().x;
+                    int lowY = (firstCoord.GetPosition().y < currentPoint.GetPosition().y) ? firstCoord.GetPosition().y : currentPoint.GetPosition().y;
+                    int highY = (firstCoord.GetPosition().y < currentPoint.GetPosition().y) ? currentPoint.GetPosition().y : firstCoord.GetPosition().y;
+
+                    bool canAdd = true;
+                    for (int i = lowY + 1; i < highY; i++)
+                    {
+                        if (_coordsMatrix[x][i].isActivated())
+                        {
+                            canAdd = false;
+                        }
+                    }
+                    if (canAdd)
+                    {
+                        newPoints.Add(firstCoord);
+                        newPoints.Add(currentPoint);
+                        currentPoint = firstCoord;
+                    }
+                }
+                else if (currentPoint.GetPosition().y == firstCoord.GetPosition().y)
+                {
+                    int y = currentPoint.GetPosition().y;
+                    int lowX = (firstCoord.GetPosition().x < currentPoint.GetPosition().x) ? firstCoord.GetPosition().x : currentPoint.GetPosition().x;
+                    int highX = (firstCoord.GetPosition().x < currentPoint.GetPosition().x) ? currentPoint.GetPosition().x : firstCoord.GetPosition().x;
+
+                    bool canAdd = true;
+                    for (int j = lowX + 1; j < highX; j++)
+                    {
+                        if (_coordsMatrix[j][y].isActivated())
+                        {
+                            canAdd = false;
+                        }
+                    }
+                    if (canAdd)
+                    {
+                        newPoints.Add(firstCoord);
+                        newPoints.Add(currentPoint);
+                        currentPoint = firstCoord;
+                    }
+                }
+
+            }
+            foreach (GridCoord c in newPoints)
+            {
+                Debug.Log("(" + c.GetPosition().x + "," + c.GetPosition().y + ")");
+            }
+
+            ActivateLine(firstCoord, newPoints);
+
+        }
     }
+
+
 }
 
 
