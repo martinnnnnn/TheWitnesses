@@ -12,7 +12,7 @@ namespace TheWitnesses
         public bool lockCursor;
         public float upDownRange = 60;
 
-        GridController Grid;
+        //GridController Grid;
         public GridManager gridManager;
 
         private Transform _camera;
@@ -34,7 +34,7 @@ namespace TheWitnesses
 
         void Start()
         {
-            //gridManager = GameObject.Find("GridManager").GetComponent<GridManager>();
+            gridManager = GameObject.Find("GridManager").GetComponent<GridManager>();
             if (!isLocalPlayer)
             {
                 //Destroy(this);
@@ -164,12 +164,15 @@ namespace TheWitnesses
                 {
                     Debug.Log("gello");
                     
-                    Grid = controller;
+                    gridManager.currentGrid = controller;
+                    CmdResetGrid();
+                    //gridManager.currentGrid.RpcReset();
                     return;
                 }
             }
 
         }
+
 
         [SyncVar]
         private GameObject objectID;

@@ -229,6 +229,7 @@ MonoBehaviour:
   smooth: 0
   lockCursor: 0
   upDownRange: 60
+  gridManager: {fileID: 0}
   layerMask:
     serializedVersion: 2
     m_Bits: 1280
