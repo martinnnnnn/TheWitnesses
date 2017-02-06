@@ -1,34 +1,27 @@
 fileFormatVersion: 2
-guid: eeadc5a09848eaa46ab00c03a704fa25
-timeCreated: 1486315017
+guid: beb16b41291363e4fad116e0ee24d26b
+timeCreated: 1486335456
 licenseType: Free
 ModelImporter:
   serializedVersion: 19
   fileIDToRecycleName:
-    100000: //RootNode
-    100002: chambre
-    100004: Cube
-    100006: entree
-    400000: //RootNode
-    400002: chambre
-    400004: Cube
-    400006: entree
-    2300000: //RootNode
-    2300002: chambre
-    2300004: Cube
-    2300006: entree
-    3300000: //RootNode
-    3300002: chambre
-    3300004: Cube
-    3300006: entree
-    4300000: Cylinder
-    4300002: entree
+    100000: Cube
+    100002: Cube_001
+    100004: Cube_002
+    100006: //RootNode
+    400000: Cube
+    400002: Cube_001
+    400004: Cube_002
+    400006: //RootNode
+    2300000: Cube
+    2300002: Cube_001
+    2300004: Cube_002
+    3300000: Cube
+    3300002: Cube_001
+    3300004: Cube_002
+    4300000: Cube_002
+    4300002: Cube_001
     4300004: Cube
-    4300006: chambre
-    6400000: //RootNode
-    6400002: chambre
-    6400004: Cube
-    6400006: entree
     7400000: Default Take
     9500000: //RootNode
   materials:
@@ -57,7 +50,7 @@ ModelImporter:
     lODScreenPercentages: []
     globalScale: 1
     meshCompression: 0
-    addColliders: 1
+    addColliders: 0
     importBlendShapes: 1
     swapUVChannels: 0
     generateSecondaryUV: 0
