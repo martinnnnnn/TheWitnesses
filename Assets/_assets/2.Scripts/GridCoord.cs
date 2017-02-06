@@ -41,7 +41,6 @@ namespace TheWitnesses
         {
             _owned = true;
             _endOfLine = !_endOfLine;
-            Debug.Log("end:" + _endOfLine);
             SetActivated();
             GetComponent<MeshRenderer>().material.color = Color.blue;
             SetEndOfLine();

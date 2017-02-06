@@ -13,6 +13,7 @@ namespace TheWitnesses
         public float upDownRange = 60;
 
         GridController Grid;
+        public GridManager gridManager;
 
         private Transform _camera;
 
@@ -22,22 +23,26 @@ namespace TheWitnesses
 
         public LayerMask layerMask;
 
+        //public GridCoord currentPoint;
 
         public override void OnStartLocalPlayer()
         {
             //GetComponent<MeshRenderer>().material.color = Color.red;
+            gridManager = GameObject.Find("GridManager").GetComponent<GridManager>();
         }
 
 
         void Start()
         {
+            //gridManager = GameObject.Find("GridManager").GetComponent<GridManager>();
             if (!isLocalPlayer)
             {
                 //Destroy(this);
                 return;
             }
-
-            Grid = GameObject.FindGameObjectWithTag("Grid").GetComponent<GridController>();
+            //gridManager = GameObject.Find("GridManager").GetComponent<GridManager>();
+            Debug.Log("name:" + gridManager.currentGrid.name);
+            //Grid = GameObject.FindGameObjectWithTag("Grid").GetComponent<GridController>();
             //Grid = GameObject.Find("Grid(Clone)").GetComponent<GridController>();
 
             _camera = Camera.main.transform;
@@ -151,11 +156,16 @@ namespace TheWitnesses
                 GridCoord coord = info.collider.GetComponent<GridCoord>();
                 if (coord)
                 {
-                    //Debug.Log("coord:" + coord.GetPosition().x + "," + coord.GetPosition().y);
-                    //Grid.Cmd_SetCoord(coord);
-  
                     CmdSetCoord(coord.gameObject);
-                    //Grid.SetCoord(coord.GetPosition().x,coord.GetPosition().y);
+                    return;
+                }
+                GridController controller = info.collider.GetComponent<GridController>();
+                if (controller)
+                {
+                    Debug.Log("gello");
+                    
+                    Grid = controller;
+                    return;
                 }
             }
 
@@ -168,14 +178,15 @@ namespace TheWitnesses
         [Command]
         void CmdSetCoord(GameObject coord)
         {
-            if (!Grid)
+            if (!gridManager.currentGrid)
             {
-                Grid = GameObject.FindGameObjectWithTag("Grid").GetComponent<GridController>();
+                return;
+                //Grid = GameObject.FindGameObjectWithTag("Grid").GetComponent<GridController>();
             }
 
-            objNetId = Grid.GetComponent<NetworkIdentity>();
+            objNetId = gridManager.currentGrid.GetComponent<NetworkIdentity>();
             objNetId.AssignClientAuthority(connectionToClient);
-            Grid.RpcSetCoord(coord,gameObject);
+            gridManager.currentGrid.RpcSetCoord(coord,gameObject);
             objNetId.RemoveClientAuthority(connectionToClient);
 
         }
@@ -183,17 +194,18 @@ namespace TheWitnesses
         [Command]
         void CmdResetGrid()
         {
-            if (!Grid)
+            if (!gridManager.currentGrid)
             {
-                Grid = GameObject.FindGameObjectWithTag("Grid").GetComponent<GridController>();
+                return;
+                //Grid = GameObject.FindGameObjectWithTag("Grid").GetComponent<GridController>();
             }
 
-            objNetId = Grid.GetComponent<NetworkIdentity>();
+            objNetId = gridManager.currentGrid.GetComponent<NetworkIdentity>();
             objNetId.AssignClientAuthority(connectionToClient);
-            Grid.RpcReset();
+            gridManager.currentGrid.RpcReset();
             objNetId.RemoveClientAuthority(connectionToClient);
 
-            List<LineHandler> lines = Grid.GetLines();
+            List<LineHandler> lines = gridManager.currentGrid.GetLines();
             for (int i = 0; i < lines.Count; i++)
             {
                 if (lines[i])
@@ -205,6 +217,17 @@ namespace TheWitnesses
 
         }
 
+        public Material endGridMaterial;
+        [Command]  
+        public void CmdEndGrid (GameObject endPointPosition, GameObject cable)
+        {
+            // spawn special FX
+            // deactivate grid
+            // activate lien
+            gridManager.currentGrid.RpcReset();
+            gridManager.currentGrid = null;
+            cable.GetComponent<Renderer>().material = endGridMaterial;
+        }
 
 
         private void CursorLockUpdate()
@@ -235,13 +258,16 @@ namespace TheWitnesses
         [Command]
         public void CmdCreateNewLine(GameObject firstCoord, GameObject sndCoord)
         {
-
+            if (!gridManager.currentGrid)
+            {
+                return;
+            }
 
             if (firstCoord != sndCoord)
             {
-                GameObject newLine = Instantiate(LinePrefab, Grid.transform);
+                GameObject newLine = Instantiate(LinePrefab, gridManager.currentGrid.transform);
                 LineHandler newLineHandler = newLine.GetComponent<LineHandler>();
-                Grid.AddLine(newLineHandler);
+                gridManager.currentGrid.AddLine(newLineHandler);
                 NetworkServer.Spawn(newLine);
 
                 objNetId = newLine.GetComponent<NetworkIdentity>();
@@ -263,6 +289,15 @@ namespace TheWitnesses
             GameObject newFX = Instantiate(FXSpawnNewPoint, obj.transform.position,obj.transform.rotation);
             NetworkServer.Spawn(newFX);
             Destroy(newFX, 0.50f);
+        }
+
+        [Command]
+        public void CmdCallCheckLines(GameObject coord)
+        {
+            objNetId = gridManager.currentGrid.GetComponent<NetworkIdentity>();
+            objNetId.AssignClientAuthority(connectionToClient);
+            gridManager.currentGrid.RpcCheckLines(coord);
+            objNetId.RemoveClientAuthority(connectionToClient);
         }
     }
 }
