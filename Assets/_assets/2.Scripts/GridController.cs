@@ -39,7 +39,6 @@ namespace TheWitnesses
             {
                 if (child.tag == ("GridCoord"))
                 {
-                    Debug.Log("j:" + j);
                     _coordsArray[j] = child.GetComponent<GridCoord>();
                     j++;
                 }
@@ -79,14 +78,14 @@ namespace TheWitnesses
             Debug.Log("rpcSetCoord");
             localClient = currentClient.GetComponent<Character>();
             GridCoord coord = gridObj.GetComponent<GridCoord>();
-            for (int i = 0; i < _coordsMatrix.Length; i++)
-            {
-                for (int j = 0; j < _coordsMatrix[i].Length; j++)
-                {
-                    //Debug.Log(i + "," + j);
-                    Debug.Log("rpc: (" + _coordsMatrix[i][j].GetPosition().x + "," + _coordsMatrix[i][j].GetPosition().y + ")");
-                }
-            }
+            //for (int i = 0; i < _coordsMatrix.Length; i++)
+            //{
+            //    for (int j = 0; j < _coordsMatrix[i].Length; j++)
+            //    {
+            //        //Debug.Log(i + "," + j);
+            //        Debug.Log("rpc: (" + _coordsMatrix[i][j].GetPosition().x + "," + _coordsMatrix[i][j].GetPosition().y + ")");
+            //    }
+            //}
 
             if (Good(coord))
             {
@@ -107,6 +106,7 @@ namespace TheWitnesses
                     _coordsMatrix[i][j].Reset();
                 }
             }
+            Debug.Log("RESET");
             currentPoint = startPoint;
             startPointDone = false;
 
@@ -147,12 +147,12 @@ namespace TheWitnesses
                     if (localClient)
                     {
                         sndCoord.SetOwned();
-                        Debug.Log("line drawn");
+                        //Debug.Log("line drawn");
                         localClient.CmdCreateNewLine(firstCoord.gameObject, sndCoord.gameObject);
                         if (sndCoord == endPoint || firstCoord == endPoint)
                         {
                             
-                            Debug.Log("hello maggle");
+                            //Debug.Log("hello maggle");
                             localClient.CmdEndGrid(endPoint.gameObject,cable);
                         }
                     }
@@ -201,14 +201,17 @@ namespace TheWitnesses
         {
             if (coord)
             {
-                Debug.Log("coord");
+                //Debug.Log("coord");
+                //Debug.Log("coord: (" + coord.GetPosition().x + "," + coord.GetPosition().y + ")");
+                //Debug.Log("coord: (" + _coordsMatrix[coord.GetPosition().x][coord.GetPosition().y].GetPosition().x + "," + _coordsMatrix[coord.GetPosition().x][coord.GetPosition().y].GetPosition().y + ")");
+                //Debug.Log(coord.name + ", " + _coordsMatrix[coord.GetPosition().x][coord.GetPosition().y].name);
                 if (coord == _coordsMatrix[coord.GetPosition().x][coord.GetPosition().y])
                 {
-                    Debug.Log("good position");
+                    //Debug.Log("good position");
 
                     if (coord.IsAvailable())
                     {
-                        Debug.Log("av");
+                        //Debug.Log("av");
 
                         return true;
                     }
@@ -285,13 +288,13 @@ namespace TheWitnesses
                 }
 
             }
-            Debug.Log("first : (" + firstCoord.GetPosition().x + "," + firstCoord.GetPosition().y + ")");
-            Debug.Log("current : (" + currentPoint.GetPosition().x + "," + currentPoint.GetPosition().y + ")");
+            //Debug.Log("first : (" + firstCoord.GetPosition().x + "," + firstCoord.GetPosition().y + ")");
+            //Debug.Log("current : (" + currentPoint.GetPosition().x + "," + currentPoint.GetPosition().y + ")");
 
-            foreach (GridCoord coord in newPoints)
-            {
-                Debug.Log("(" + coord.GetPosition().x + "," + coord.GetPosition().y + ")");
-            }
+            //foreach (GridCoord coord in newPoints)
+            //{
+            //    Debug.Log("(" + coord.GetPosition().x + "," + coord.GetPosition().y + ")");
+            //}
             return newPoints;
 
 
@@ -371,14 +374,14 @@ namespace TheWitnesses
                 _coordsMatrix[pos.x][pos.y] = coord;
             }
 
-            for (int i = 0; i < _coordsMatrix.Length; i++)
-            {
-                for (int j = 0; j < _coordsMatrix[i].Length; j++)
-                {
-                    //Debug.Log(i + "," + j);
-                    Debug.Log("init: (" + _coordsMatrix[i][j].GetPosition().x + "," + _coordsMatrix[i][j].GetPosition().y + ")");
-                }
-            }
+            //for (int i = 0; i < _coordsMatrix.Length; i++)
+            //{
+            //    for (int j = 0; j < _coordsMatrix[i].Length; j++)
+            //    {
+            //        //Debug.Log(i + "," + j);
+            //        Debug.Log("init: (" + _coordsMatrix[i][j].GetPosition().x + "," + _coordsMatrix[i][j].GetPosition().y + ")");
+            //    }
+            //}
         }
 
         [ClientRpc]
@@ -443,10 +446,10 @@ namespace TheWitnesses
                 }
 
             }
-            foreach (GridCoord c in newPoints)
-            {
-                Debug.Log("(" + c.GetPosition().x + "," + c.GetPosition().y + ")");
-            }
+            //foreach (GridCoord c in newPoints)
+            //{
+            //    Debug.Log("(" + c.GetPosition().x + "," + c.GetPosition().y + ")");
+            //}
 
             ActivateLine(firstCoord, newPoints);
 
